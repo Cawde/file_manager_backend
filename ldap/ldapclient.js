@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
 
 const ldapConfig = {
-  url: 'https://localhost:636',
+  url: 'https://localhost:389',
   bindDN: 'cn=admin,dc=filemanager',
   bindCredentials: 'shegotmotion',
 };
