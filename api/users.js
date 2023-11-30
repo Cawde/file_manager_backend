@@ -138,11 +138,12 @@ usersRouter.post('/login', async (req, res, next) => {
                 const passwordsMatch = bcrypt.compareSync(password, ldapHash);
                 if (passwordsMatch) {
                     res.send({
-                        message: "you're logged in!",
+                        success: "you're logged in!",
+                        hash: ldapHash
                     });
                 } else {
                     next({
-                        name: "IncorrectCredentialsError",
+                        error: "IncorrectCredentialsError",
                         message: "Username or password is incorrect",
                     });
                     return;
