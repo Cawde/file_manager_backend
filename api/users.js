@@ -109,14 +109,15 @@ usersRouter.post('/login', async (req, res, next) => {
         const hashedPassword = bcrypt.hashSync(password, SALT_COUNT);
     
         // Check if the user already exists
-        let entryInfo;
+        let entryPass;
         let userPasswordLine;
         let line = "";
-        client.search('dc=filemanager', { scope: 'sub', filter: `(uid=${req.body.username})` }, (searchErr, searchRes) => {
+        client.search('dc=filemanager', { scope: 'sub', filter: `(uid=${username})` }, (searchErr, searchRes) => {
             if (searchErr) {
               console.error('LDAP Search Error:', searchErr);
               return;
             }
+
       
             searchRes.on('searchEntry', (entry) => {
                 console.log('Found Test User:');
@@ -125,24 +126,30 @@ usersRouter.post('/login', async (req, res, next) => {
                 // Print each attribute and its values
                 entry.attributes.forEach((attribute) => {
                 // Split the string into lines
-                console.log(`${attribute.type}: ${attribute.vals.join(', ')}`);
-
-
+                if (attribute.type === "userPassword") {
+                    entryPass = attribute.vals.join(', ');
+                }
+                console.log(`${attribute.type}: ${attribute.vals.join(', ')}, ${attribute.type}`);
                 // Find the line that contains 'userPassword'
                 });
+                console.log("Here's the entryPass variable: " + entryPass);
+                console.log({
+                    hashedPassword,
+                    entryPass
+                })
+                if (entryPass === hashedPassword) {
+                    res.send({
+                        message: "you're logged in!",
+                    });
+                } else {
+                    next({
+                        name: "IncorrectCredentialsError",
+                        message: "Username or password is incorrect",
+                    });
+                    return;
+                }
               });
-            if (entryInfo == hashedPassword) {
-                res.send({
-                    message: "you're logged in!",
-                  });
-            } else {
-                next({
-                    name: "IncorrectCredentialsError",
-                    message: "Username or password is incorrect",
-                  });
-                return;
-            }
-      
+
             searchRes.on('end', () => {
               client.unbind();
             });
