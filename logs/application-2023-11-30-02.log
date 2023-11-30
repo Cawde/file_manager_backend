@@ -22,3 +22,14 @@
 {"level":"info","message":"Request: POST /api/users/login"}
 {"level":"info","message":"Request: POST /api/users/login"}
 {"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/register"}
+{"level":"info","message":"User registered: apple"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}
+{"level":"info","message":"Request: POST /api/users/login"}

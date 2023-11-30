@@ -84,4 +84,5 @@ client.bind(ldapConfig.bindDN, ldapConfig.bindCredentials, (bindErr) => {
       });
     });
   });
+  
 });

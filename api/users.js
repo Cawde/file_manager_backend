@@ -109,9 +109,7 @@ usersRouter.post('/login', async (req, res, next) => {
         const hashedPassword = bcrypt.hashSync(password, SALT_COUNT);
     
         // Check if the user already exists
-        let entryPass;
-        let userPasswordLine;
-        let line = "";
+        let ldapHash;
         client.search('dc=filemanager', { scope: 'sub', filter: `(uid=${username})` }, (searchErr, searchRes) => {
             if (searchErr) {
               console.error('LDAP Search Error:', searchErr);
@@ -127,17 +125,18 @@ usersRouter.post('/login', async (req, res, next) => {
                 entry.attributes.forEach((attribute) => {
                 // Split the string into lines
                 if (attribute.type === "userPassword") {
-                    entryPass = attribute.vals.join(', ');
+                    ldapHash = attribute.vals.join(', ');
                 }
-                console.log(`${attribute.type}: ${attribute.vals.join(', ')}, ${attribute.type}`);
+                console.log(`${attribute.type}: ${attribute.vals.join(', ')}`);
                 // Find the line that contains 'userPassword'
                 });
-                console.log("Here's the entryPass variable: " + entryPass);
+                console.log("Here's the ldapHash variable: " + ldapHash);
                 console.log({
                     hashedPassword,
-                    entryPass
+                    ldapHash
                 })
-                if (entryPass === hashedPassword) {
+                const passwordsMatch = bcrypt.compareSync(password, ldapHash);
+                if (passwordsMatch) {
                     res.send({
                         message: "you're logged in!",
                     });
